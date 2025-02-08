@@ -1,0 +1,185 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/author": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "可按社区按时间或分数排序查询帖子列表接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "作者相关接口"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "当前页",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "当前页的数量",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/author.getOutput"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "添加一个作者信息 包括名字和生日",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "作者相关接口"
+                ],
+                "summary": "添加一个作者",
+                "parameters": [
+                    {
+                        "description": "作者生日",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/author.addForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/author.addOutput"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "author.addForm": {
+            "type": "object",
+            "required": [
+                "birthday",
+                "name"
+            ],
+            "properties": {
+                "birthday": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "binding:\"required\"修饰的字段，若接收为空值，则报错，是必须字段",
+                    "type": "string"
+                }
+            }
+        },
+        "author.addOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "default": 0
+                },
+                "errMsg": {
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "string",
+                    "default": "OK"
+                }
+            }
+        },
+        "author.getOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "default": 0
+                },
+                "data": {
+                    "description": "数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AuthorOUtput"
+                    }
+                },
+                "errMsg": {
+                    "type": "string"
+                },
+                "hasNext": {
+                    "description": "是否有下一页",
+                    "type": "boolean"
+                },
+                "hasPerv": {
+                    "description": "是否有上一页",
+                    "type": "boolean"
+                },
+                "msg": {
+                    "type": "string",
+                    "default": "OK"
+                },
+                "page": {
+                    "description": "当前页",
+                    "type": "integer",
+                    "default": 1
+                },
+                "pages": {
+                    "description": "总页数",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "当前页的数量",
+                    "type": "integer",
+                    "default": 10
+                },
+                "total": {
+                    "description": "总数",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.AuthorOUtput": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

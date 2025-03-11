@@ -9,19 +9,24 @@
 package response
 
 type BaseResponse struct {
-	Code   int    `json:"code" default:"0"`
-	Msg    string `json:"msg" default:"OK"`
-	ErrMsg string `json:"errMsg" default:""`
+	Code int    `json:"code" default:"0"`
+	Msg  string `json:"errMsg" default:""`
 }
 
-func (r *BaseResponse) Error(code Code, errMsg string) {
+func (r *BaseResponse) Error(code Code) {
 	r.Code = code.Value()
 	r.Msg = code.String()
-	r.ErrMsg = errMsg
 }
 
-func (r *BaseResponse) Ok() {
+func (r *BaseResponse) Ok(msg string) {
 	r.Code = OK.Value()
-	r.Msg = OK.String()
-	r.ErrMsg = ""
+	if msg == "" {
+		r.Msg = OK.String()
+	} else {
+		r.Msg = msg
+	}
+}
+
+func NewBaseResponse() *BaseResponse {
+	return &BaseResponse{}
 }

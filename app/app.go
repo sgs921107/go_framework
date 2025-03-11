@@ -14,6 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sgs921107/glogging"
 	v1 "github.com/sgs921107/go_framework/app/v1"
+	"github.com/sgs921107/go_framework/app/validators"
 	"github.com/sgs921107/go_framework/common"
 )
 
@@ -53,6 +54,7 @@ func ListenAndServer(addr string, opts ...gin.OptionFunc) error {
 	gin.DebugPrintFunc = DebugPrintFunc
 	gin.DebugPrintRouteFunc = DebugPrintRouteFunc
 	engin := gin.New(opts...)
+	validators.RegisterValidators()
 	logger := gin.LoggerWithConfig(gin.LoggerConfig{
 		Formatter: LogFormatter,
 		Output:    common.Logger.Out,

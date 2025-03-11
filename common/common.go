@@ -10,9 +10,21 @@ package common
 
 import (
 	"github.com/sgs921107/glogging"
+	"strconv"
 )
 
 var (
 	Setting = NewSetting()
 	Logger  = glogging.NewLogrusLogging(glogging.Options{}).GetLogger()
 )
+
+func Str2Uint(s string) (uint, error) {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return 0, ErrValue
+	}
+	if i < 0 {
+		return 0, ErrValue
+	}
+	return uint(i), nil
+}

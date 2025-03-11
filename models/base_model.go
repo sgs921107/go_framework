@@ -9,18 +9,27 @@
 package models
 
 import (
+	"gorm.io/gorm"
+	"time"
+
 	"github.com/bwmarrin/snowflake"
 	"github.com/sgs921107/go_framework/common"
-	"gorm.io/gorm"
 )
 
 var (
 	snowFlakeNode *snowflake.Node
 )
 
+type BaseModel struct {
+	ID        uint           `gorm:"primarykey"`
+	CreatedAt time.Time      `gorm:"autoCreateTime"`
+	UpdatedAt time.Time      `gorm:"autoUpdateTime"`
+	DeletedAt gorm.DeletedAt `gorm:"index"`
+}
+
 // 雪花model 使用雪花算法来生成id
 type SnowFlakeModel struct {
-	gorm.Model
+	BaseModel
 }
 
 func (m *SnowFlakeModel) BeforeCreate(tx *gorm.DB) (err error) {

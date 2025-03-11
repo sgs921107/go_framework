@@ -9,6 +9,7 @@
 package common
 
 import (
+	"errors"
 	"path"
 	"runtime"
 )
@@ -18,9 +19,20 @@ var (
 	CUR_DIR           = path.Dir(CUR_FILE)
 	PROJECT_DIR       = path.Dir(CUR_DIR)
 	ENV_PATH          = path.Join(PROJECT_DIR, ".env")
+
+	// errors
+	ErrValue = errors.New("Value Error")
 )
 
 const (
 	DATE_LAYOUT = "2006-01-02"
 	Time_LAYOUT = "2006-01-02 15:04:05-07:00"
+)
+
+type Role uint
+
+const (
+	GeneralUser Role = iota
+	Merchant
+	Administrator
 )

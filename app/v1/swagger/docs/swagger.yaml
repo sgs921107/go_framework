@@ -1,122 +1,210 @@
 definitions:
-  author.addForm:
+  models.UserOutput:
     properties:
-      birthday:
+      avatar:
         type: string
-      name:
-        description: binding:"required"修饰的字段，若接收为空值，则报错，是必须字段
+      email:
         type: string
-    required:
-    - birthday
-    - name
+      gender:
+        type: integer
+      id:
+        type: integer
+      nickname:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
     type: object
-  author.addOutput:
+  response.BaseResponse:
     properties:
       code:
         default: 0
         type: integer
       errMsg:
         type: string
-      msg:
-        default: OK
-        type: string
     type: object
-  author.getOutput:
+  users.UserResponse:
     properties:
       code:
         default: 0
         type: integer
       data:
-        description: 数据
-        items:
-          $ref: '#/definitions/models.AuthorOUtput'
-        type: array
+        $ref: '#/definitions/models.UserOutput'
       errMsg:
-        type: string
-      hasNext:
-        description: 是否有下一页
-        type: boolean
-      hasPerv:
-        description: 是否有上一页
-        type: boolean
-      msg:
-        default: OK
-        type: string
-      page:
-        default: 1
-        description: 当前页
-        type: integer
-      pages:
-        description: 总页数
-        type: integer
-      size:
-        default: 10
-        description: 当前页的数量
-        type: integer
-      total:
-        description: 总数
-        type: integer
-    type: object
-  models.AuthorOUtput:
-    properties:
-      birthday:
-        type: string
-      id:
-        type: integer
-      name:
         type: string
     type: object
 info:
   contact: {}
+  description: Listen and Server
+  version: 0.0.1
 paths:
-  /author:
+  /users:
+    put:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 更新用户信息接口
+      parameters:
+      - in: formData
+        maxLength: 20
+        minLength: 8
+        name: Email
+        required: true
+        type: string
+      - in: formData
+        maximum: 2
+        minimum: 0
+        name: gender
+        required: true
+        type: integer
+      - in: formData
+        maxLength: 10
+        minLength: 4
+        name: nickname
+        required: true
+        type: string
+      - in: formData
+        maxLength: 11
+        minLength: 11
+        name: phone
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: 错误的请求
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户信息
+      tags:
+      - 用户相关接口
+  /users/{id}:
     get:
       consumes:
-      - application/json
-      description: 可按社区按时间或分数排序查询帖子列表接口
+      - application/urlencoded
+      description: 查询用户信息接口
       parameters:
-      - default: 1
-        description: 当前页
-        in: query
-        name: page
-        type: integer
-      - default: 10
-        description: 当前页的数量
-        in: query
-        name: size
+      - description: 用户id
+        in: path
+        name: id
+        required: true
         type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: success
+          description: 成功
           schema:
-            $ref: '#/definitions/author.getOutput'
+            $ref: '#/definitions/users.UserResponse'
+        "400":
+          description: 错误的请求
+          schema:
+            $ref: '#/definitions/users.UserResponse'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/users.UserResponse'
       security:
       - ApiKeyAuth: []
+      summary: 用户信息
       tags:
-      - 作者相关接口
+      - 用户相关接口
+  /users/login:
     post:
       consumes:
-      - application/json
-      description: 添加一个作者信息 包括名字和生日
+      - application/x-www-form-urlencoded
+      description: 用户登录接口
       parameters:
-      - description: 作者生日
-        in: body
-        name: data
+      - in: formData
+        maxLength: 30
+        minLength: 9
+        name: password
         required: true
-        schema:
-          $ref: '#/definitions/author.addForm'
+        type: string
+      - in: formData
+        maximum: 1
+        minimum: 0
+        name: role
+        type: integer
+      - in: formData
+        maxLength: 20
+        minLength: 8
+        name: username
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: Success
+          description: 成功
           schema:
-            $ref: '#/definitions/author.addOutput'
-      security:
-      - ApiKeyAuth: []
-      summary: 添加一个作者
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: 错误的请求
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: 登录
       tags:
-      - 作者相关接口
+      - 用户相关接口
+  /users/register:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 用户注册接口
+      parameters:
+      - in: formData
+        maxLength: 30
+        minLength: 9
+        name: password
+        required: true
+        type: string
+      - in: formData
+        maximum: 1
+        minimum: 0
+        name: role
+        type: integer
+      - in: formData
+        maxLength: 20
+        minLength: 8
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: 错误的请求
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: 添加一个用户
+      tags:
+      - 用户相关接口
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

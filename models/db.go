@@ -121,7 +121,7 @@ func (c *MysqlClient) DSN() string {
 }
 
 func (c *MysqlClient) Migrator() error {
-	err := c.DB().AutoMigrate(&Author{}, &Book{})
+	err := c.DB().AutoMigrate(&Users{})
 	if err != nil {
 		common.Logger.WithField("err", err.Error()).Fatal("Failed To Auto Migrate!")
 

@@ -9,7 +9,6 @@
 package token
 
 import (
-	"errors"
 	"sync"
 	"time"
 
@@ -50,13 +49,25 @@ func (j *JWT) GenWithClaims(claims jwt.MapClaims) (string, error) {
 	return obj.SignedString(j.Key)
 }
 
+// 通过用户名和密码生成token
+func (j *JWT) GenWithMap(data map[string]interface{}) (string, error) {
+	claims := BaseClaims()
+	for k, v := range data {
+		claims[k] = v
+	}
+	return j.GenWithClaims(claims)
+}
+
 // 解析token
-func (j *JWT) Parse(token string, options ...jwt.ParserOption) (jwt.Claims, error) {
+func (j *JWT) Parse(token string, options ...jwt.ParserOption) (jwt.MapClaims, error) {
 	tokenObj, err := jwt.ParseWithClaims(token, BaseClaims(), KeyFunc, options...)
 	if err != nil {
 		return nil, err
 	}
-	return tokenObj.Claims, nil
+	if claims, ok := tokenObj.Claims.(jwt.MapClaims); ok {
+		return claims, nil
+	}
+	return nil, jwt.ErrTokenInvalidClaims
 }
 
 // Valid 验证token是否合法
@@ -66,17 +77,13 @@ func (j *JWT) Valid(token string, options ...jwt.ParserOption) error {
 }
 
 // AllowRefresh 是否可以刷新token  token过期一定时间内可以刷新token
-func (j *JWT) AllowRefresh(token string, options ...jwt.ParserOption) (bool, error) {
-	claims, err := j.Parse(token, options...)
-	if err != nil {
-		return false, err
-	}
+func (j *JWT) AllowRefresh(claims jwt.MapClaims) (bool, error) {
 	exp, err := claims.GetExpirationTime()
 	if err != nil {
 		return false, err
 	}
 	if exp.Add(j.Validity).Before(time.Now()) {
-		return false, errors.New("token已超出最大刷新时间")
+		return false, jwt.ErrTokenExpired
 	}
 	return true, nil
 }

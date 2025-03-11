@@ -1,84 +1,249 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Listen and Server",
+        "contact": {},
+        "version": "0.0.1"
     },
     "paths": {
-        "/author": {
+        "/users": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更新用户信息接口",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户相关接口"
+                ],
+                "summary": "更新用户信息",
+                "parameters": [
+                    {
+                        "maxLength": 20,
+                        "minLength": 8,
+                        "type": "string",
+                        "name": "Email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "maximum": 2,
+                        "minimum": 0,
+                        "type": "integer",
+                        "name": "gender",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "maxLength": 10,
+                        "minLength": 4,
+                        "type": "string",
+                        "name": "nickname",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "maxLength": 11,
+                        "minLength": 11,
+                        "type": "string",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "错误的请求",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "description": "用户登录接口",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户相关接口"
+                ],
+                "summary": "登录",
+                "parameters": [
+                    {
+                        "maxLength": 30,
+                        "minLength": 9,
+                        "type": "string",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "maximum": 1,
+                        "minimum": 0,
+                        "type": "integer",
+                        "name": "role",
+                        "in": "formData"
+                    },
+                    {
+                        "maxLength": 20,
+                        "minLength": 8,
+                        "type": "string",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "错误的请求",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/register": {
+            "post": {
+                "description": "用户注册接口",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户相关接口"
+                ],
+                "summary": "添加一个用户",
+                "parameters": [
+                    {
+                        "maxLength": 30,
+                        "minLength": 9,
+                        "type": "string",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "maximum": 1,
+                        "minimum": 0,
+                        "type": "integer",
+                        "name": "role",
+                        "in": "formData"
+                    },
+                    {
+                        "maxLength": 20,
+                        "minLength": 8,
+                        "type": "string",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "错误的请求",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "可按社区按时间或分数排序查询帖子列表接口",
+                "description": "查询用户信息接口",
                 "consumes": [
-                    "application/json"
+                    "application/urlencoded"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "作者相关接口"
+                    "用户相关接口"
                 ],
+                "summary": "用户信息",
                 "parameters": [
                     {
                         "type": "integer",
-                        "default": 1,
-                        "description": "当前页",
-                        "name": "page",
-                        "in": "query"
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/users.UserResponse"
+                        }
                     },
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "当前页的数量",
-                        "name": "size",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
+                    "400": {
+                        "description": "错误的请求",
                         "schema": {
-                            "$ref": "#/definitions/author.getOutput"
+                            "$ref": "#/definitions/users.UserResponse"
                         }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "添加一个作者信息 包括名字和生日",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "作者相关接口"
-                ],
-                "summary": "添加一个作者",
-                "parameters": [
-                    {
-                        "description": "作者生日",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/author.addForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/author.addOutput"
+                            "$ref": "#/definitions/users.UserResponse"
                         }
                     }
                 }
@@ -86,23 +251,33 @@
         }
     },
     "definitions": {
-        "author.addForm": {
+        "models.UserOutput": {
             "type": "object",
-            "required": [
-                "birthday",
-                "name"
-            ],
             "properties": {
-                "birthday": {
+                "avatar": {
                     "type": "string"
                 },
-                "name": {
-                    "description": "binding:\"required\"修饰的字段，若接收为空值，则报错，是必须字段",
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
         },
-        "author.addOutput": {
+        "response.BaseResponse": {
             "type": "object",
             "properties": {
                 "code": {
@@ -111,14 +286,10 @@
                 },
                 "errMsg": {
                     "type": "string"
-                },
-                "msg": {
-                    "type": "string",
-                    "default": "OK"
                 }
             }
         },
-        "author.getOutput": {
+        "users.UserResponse": {
             "type": "object",
             "properties": {
                 "code": {
@@ -126,60 +297,19 @@
                     "default": 0
                 },
                 "data": {
-                    "description": "数据",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.AuthorOUtput"
-                    }
+                    "$ref": "#/definitions/models.UserOutput"
                 },
                 "errMsg": {
                     "type": "string"
-                },
-                "hasNext": {
-                    "description": "是否有下一页",
-                    "type": "boolean"
-                },
-                "hasPerv": {
-                    "description": "是否有上一页",
-                    "type": "boolean"
-                },
-                "msg": {
-                    "type": "string",
-                    "default": "OK"
-                },
-                "page": {
-                    "description": "当前页",
-                    "type": "integer",
-                    "default": 1
-                },
-                "pages": {
-                    "description": "总页数",
-                    "type": "integer"
-                },
-                "size": {
-                    "description": "当前页的数量",
-                    "type": "integer",
-                    "default": 10
-                },
-                "total": {
-                    "description": "总数",
-                    "type": "integer"
                 }
             }
-        },
-        "models.AuthorOUtput": {
-            "type": "object",
-            "properties": {
-                "birthday": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

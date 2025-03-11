@@ -10,6 +10,12 @@ package main
 
 import "github.com/sgs921107/go_framework/app"
 
+// @version 0.0.1
+// @description Listen and Server
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @BasePath /
 func main() {
 	app.ListenAndServer("0.0.0.0:8080")
 }
